@@ -1,22 +1,29 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const userName = ['kamal','jamal','Rahim','Kader'];
   const employeeName = [
-    {name:'Kamal',salary:'1000'},
-    {name:'Jamal',salary:'2000'},
+    {name:'Kamal',salary:'$1000',about:'My Name is Kamal Hossen, I am a Web designer and Developer, I have Experience around 1 years in Programming Sector'},
+    {name:'Jamal',salary:'$2000'},
     {name:'Rahmin',salary:'3000'},
     {name:'Kamal',salary:'4000'},
+    {name:'karim',salary:'5000'}
   ]
   return (
     <div className="App">
       <header className="App-header">
       <Counter></Counter>
-        <Card employee = {employeeName[0]}></Card>
-        <Card></Card>
-        <Card></Card>
-        <Card></Card>
+      <TotalUser></TotalUser>
+      
+      <div>
+      {
+          employeeName.map(emp=><Card employeeName = {emp}></Card>)
+      }
+     
+      </div>
+      
       </header>
     </div>
   );
@@ -34,8 +41,8 @@ function Counter(){
   return(
     <div>
       <h2>Count:{count}</h2>
-      <button onClick={handleListner}>Increase</button>
-      <button onClick={handleListner1}>Decrease</button>
+      <button onMouseMove={handleListner}>Increase</button>
+      <button onMouseMove={handleListner1}>Decrease</button>
     </div>
   )
 }
@@ -45,16 +52,35 @@ function Card(props){
     height:'250px',
     width:'250px',
     border:'2px solid light',
-    margin:'5px'
+    margin:'5px',
+    display:'inline-block',
+    overflow:'hidden'
   }
-  console.log(props);
+  const {name, salary, about} = props.employeeName;
   return(
     <div style={styleCard}>
-      <h2>{props.employee.name}</h2>
-      <h5></h5>
-      <p></p>
+      <h2>{name}</h2>
+      <h5>{salary}</h5>
+      <p>{about}</p>
     </div>
   )
 }
+
+ function TotalUser(){
+   const [users, setUsers] = useState([]);
+   useEffect(()=>{
+     fetch('https://jsonplaceholder.typicode.com/users')
+     .then(res=>res.json())
+     .then(data=>setUsers(data))
+   })
+   return(
+      <div>
+        <h2>Dynamic User: {users.length}</h2>
+        {
+          users.map(userName=><li>{userName.name}</li>)
+        }
+      </div>
+   )
+ } 
 
 export default App;
